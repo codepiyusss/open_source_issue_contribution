@@ -16,4 +16,4 @@ def km_to_miles(km: float) -> float:
 
 
 def miles_to_km(miles: float) -> float:
-    return miles / KM_PER_MILE
+    return miles * KM_PER_MILE
