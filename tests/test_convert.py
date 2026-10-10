@@ -15,6 +15,18 @@ def test_km_to_miles():
     assert km_to_miles(10) == pytest.approx(6.21371, rel=1e-4)
 
 
-@pytest.mark.xfail(reason="Known bug: miles_to_km divides instead of multiplies")
 def test_miles_to_km():
     assert miles_to_km(1) == pytest.approx(1.609344)
+
+
+def test_negative_celsius():
+    assert celsius_to_fahrenheit(-20)==-4
+
+def test_zero_celsius():
+    assert celsius_to_fahrenheit(0) == 32
+
+def test_absolute_zero():
+    assert celsius_to_fahrenheit(-273.15) == pytest.approx(-459.67)
+
+def test_float_km_to_miles():
+    assert km_to_miles(1.5) == pytest.approx(0.932056788)
