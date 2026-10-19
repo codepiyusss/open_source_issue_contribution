@@ -1,6 +1,7 @@
 """Command line entry point: `fixit <command>`."""
 import argparse
 import sys
+import uuid
 
 from fixit import __version__, convert, jsonfmt, password, textutils, wordcount
 
@@ -28,6 +29,9 @@ def build_parser() -> argparse.ArgumentParser:
     pw.add_argument("--length", type=int, default=12)
     pw.add_argument("--symbols", action="store_true")
 
+    uid = sub.add_parser("uuid", help="generate UUIDs")
+    uid.add_argument("--count", type=int, default=1)
+
     js = sub.add_parser("json", help="pretty-print JSON")
     js.add_argument("raw")
 
@@ -49,6 +53,9 @@ def main(argv=None) -> int:
         print(CONVERSIONS[args.kind](args.value))
     elif args.command == "password":
         print(password.generate(args.length, use_symbols=args.symbols))
+    elif args.command == "uuid":
+        for _ in range(args.count):
+            print(uuid.uuid4())
     elif args.command == "json":
         print(jsonfmt.format_json(args.raw))
     elif args.command == "palindrome":
