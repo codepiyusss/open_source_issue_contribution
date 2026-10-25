@@ -12,7 +12,9 @@ from fixit import __version__, convert, jsonfmt, password, textutils, wordcount
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
     "f2c": convert.fahrenheit_to_celsius,
+    "kg2lb": convert.kg_to_lbs,
     "km2mi": convert.km_to_miles,
+    "lb2kg": convert.lbs_to_kg,
     "mi2km": convert.miles_to_km,
 }
 

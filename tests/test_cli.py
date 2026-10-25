@@ -1,3 +1,5 @@
+import pytest
+
 from fixit.cli import main
 
 
@@ -43,3 +45,14 @@ def test_top_words_command_defaults_to_three(capsys):
 
     assert result == 0
     assert capsys.readouterr().out == "one: 1\ntwo: 1\nthree: 1\n"
+
+
+def test_convert_command_weight(capsys):
+    result = main(["convert", "1", "kg2lb"])
+    assert result == 0
+    assert float(capsys.readouterr().out.strip()) == pytest.approx(2.20462)
+
+    result = main(["convert", "2.20462", "lb2kg"])
+    assert result == 0
+    assert float(capsys.readouterr().out.strip()) == pytest.approx(1.0)
+
