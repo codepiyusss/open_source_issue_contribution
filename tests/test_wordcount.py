@@ -46,3 +46,18 @@ def test_top_words_empty_text():
 def test_top_words_requires_positive_n():
     with pytest.raises(ValueError, match="at least 1"):
         top_words("hello", 0)
+
+def test_count_chars_accented_text():
+    assert count_chars("café") == 4
+
+
+def test_count_chars_multi_codepoint_emoji():
+    assert count_chars("❤️") == 2
+
+
+def test_count_words_accented_text():
+    assert count_words("café naïve") == 2
+
+
+def test_count_words_hindi_text():
+    assert count_words("नमस्ते दुनिया") == 2
