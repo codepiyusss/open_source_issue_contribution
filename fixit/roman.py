@@ -28,7 +28,7 @@ def to_roman(n: int) -> str:
 def from_roman(s: str) -> int:
     """Convert a Roman numeral string to an integer."""
     if not isinstance(s, str):
-        raise ValueError("Input must be a string not a valid Roman numeral")
+        raise TypeError("Input must be a string not a valid Roman numeral")
     
     # Normalize to uppercase to support lowercase inputs like 'mcmxciv'
     s = s.upper()
