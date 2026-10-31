@@ -54,7 +54,7 @@ def run_uuid(args: argparse.Namespace) -> None:
 
 def run_json(args: argparse.Namespace) -> None:
     try:
-        print(jsonfmt.format_json(args.raw))
+        print(jsonfmt.format_json(args.raw, minify=args.minify))
     except ValueError as e:
         raise ValueError(f"Error: invalid JSON - {e}")
 
@@ -139,6 +139,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     js = sub.add_parser("json", help="pretty-print JSON")
     js.add_argument("raw")
+    js.add_argument(
+        "--minify",
+        action="store_true",
+        help="Minify JSON output by removing whitespace and indentation",
+    )
 
     pal = sub.add_parser("palindrome", help="check if text is a palindrome")
     pal.add_argument("text")
