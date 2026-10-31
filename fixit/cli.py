@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Optional
 
-from fixit import __version__, convert, jsonfmt, password, roman, textutils, wordcount
+from fixit import __version__, convert, hashing, jsonfmt, password, textutils, wordcount
 
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
@@ -47,6 +47,13 @@ def run_password(args: argparse.Namespace) -> None:
     print(password.generate(args.length, use_symbols=args.symbols))
 
 
+def run_hash(args):
+    """Run the hash command."""
+    result = hashing.hash_text(args.text, args.algo)
+    print(result)
+
+
+
 def run_uuid(args: argparse.Namespace) -> None:
     for _ in range(args.count):
         print(uuid.uuid4())
@@ -75,8 +82,9 @@ def run_top_words(args: argparse.Namespace) -> None:
 def run_slugify(args: argparse.Namespace) -> None:
     print(textutils.slugify(args.text))
 
-
+    
 def run_roman(args: argparse.Namespace) -> None:
+    from fixit import roman
     value = args.value
 
     try:
@@ -98,6 +106,7 @@ COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
     "password": run_password,
+    "hash": run_hash,
     "uuid": run_uuid,
     "json": run_json,
     "palindrome": run_palindrome,
@@ -133,6 +142,15 @@ def build_parser() -> argparse.ArgumentParser:
     pw = sub.add_parser("password", help="generate a password")
     pw.add_argument("--length", type=int, default=12)
     pw.add_argument("--symbols", action="store_true")
+
+    hash_parser = sub.add_parser("hash", help="generate a text hash")
+    hash_parser.add_argument("text", help="text to hash")
+    hash_parser.add_argument(
+        "--algo",
+        choices=["md5", "sha1", "sha256"],
+        default="sha256",
+        help="hashing algorithm (default: sha256)",
+    )
 
     uid = sub.add_parser("uuid", help="generate UUIDs")
     uid.add_argument("--count", type=int, default=1)
