@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Optional
 
-from fixit import __version__, convert, jsonfmt, password, textutils, wordcount
+from fixit import __version__, convert, jsonfmt, password, roman, textutils, wordcount
 
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
@@ -76,6 +76,24 @@ def run_slugify(args: argparse.Namespace) -> None:
     print(textutils.slugify(args.text))
 
 
+def run_roman(args: argparse.Namespace) -> None:
+    value = args.value
+
+    try:
+        number = int(value)
+    except ValueError:
+        try:
+            print(roman.from_roman(value))
+        except ValueError as exc:
+            raise ValueError(str(exc)) from exc
+        return
+
+    try:
+        print(roman.to_roman(number))
+    except ValueError as exc:
+        raise ValueError(str(exc)) from exc
+
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -86,6 +104,7 @@ COMMAND_TABLE = {
     "reverse": run_reverse,
     "slugify": run_slugify,
     "top-words": run_top_words,
+    "roman": run_roman,
 }
 
 
@@ -135,6 +154,9 @@ def build_parser() -> argparse.ArgumentParser:
     top.add_argument(
         "--n", type=int, default=3, help="number of words to show (default: 3)"
     )
+
+    rom = sub.add_parser("roman", help="convert numbers and Roman numerals")
+    rom.add_argument("value")
 
     return parser
 
