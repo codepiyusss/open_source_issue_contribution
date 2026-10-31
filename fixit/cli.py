@@ -7,7 +7,7 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Optional
 
-from fixit import __version__, convert, jsonfmt, password, roman, textutils, wordcount
+from fixit import __version__, convert, finance, jsonfmt, password, textutils, wordcount
 
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
@@ -34,7 +34,6 @@ def run_wc(args: argparse.Namespace) -> None:
         f"chars={wordcount.count_chars(text)}"
     )
 
-
 def run_convert(args: argparse.Namespace) -> None:
     try:
         result = CONVERSIONS[args.kind](args.value)
@@ -45,6 +44,12 @@ def run_convert(args: argparse.Namespace) -> None:
 
 def run_password(args: argparse.Namespace) -> None:
     print(password.generate(args.length, use_symbols=args.symbols))
+
+
+def run_emi(args: argparse.Namespace) -> None:
+    """Calculate and display the monthly loan EMI."""
+    emi = finance.calculate_emi(args.principal, args.rate, args.years)
+print(f"{emi:.2f}")
 
 
 def run_uuid(args: argparse.Namespace) -> None:
@@ -77,7 +82,10 @@ def run_slugify(args: argparse.Namespace) -> None:
 
 
 def run_roman(args: argparse.Namespace) -> None:
+    from fixit import roman
+
     value = args.value
+
 
     try:
         number = int(value)
@@ -105,6 +113,7 @@ COMMAND_TABLE = {
     "slugify": run_slugify,
     "top-words": run_top_words,
     "roman": run_roman,
+    "emi": run_emi,
 }
 
 
@@ -133,6 +142,10 @@ def build_parser() -> argparse.ArgumentParser:
     pw = sub.add_parser("password", help="generate a password")
     pw.add_argument("--length", type=int, default=12)
     pw.add_argument("--symbols", action="store_true")
+    emi = sub.add_parser("emi", help="calculate monthly loan EMI")
+    emi.add_argument("--principal", type=float, required=True)
+    emi.add_argument("--rate", type=float, required=True)
+    emi.add_argument("--years", type=int, required=True)
 
     uid = sub.add_parser("uuid", help="generate UUIDs")
     uid.add_argument("--count", type=int, default=1)
