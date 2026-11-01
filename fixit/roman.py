@@ -7,6 +7,15 @@ _VALUES = [
 ]
 
 
+def _encode(number: int) -> str:
+    result = []
+    for value, symbol in _VALUES:
+        while number >= value:
+            result.append(symbol)
+            number -= value
+    return "".join(result)
+
+
 def to_roman(number: int) -> str:
     """Convert an integer from 1 to 3999 to a Roman numeral.
 
@@ -14,13 +23,8 @@ def to_roman(number: int) -> str:
     'MCMXCIV'
     """
     if isinstance(number, bool) or not isinstance(number, int) or not 1 <= number <= 3999:
-        raise ValueError("number must be an integer from 1 to 3999")
-    result = []
-    for value, symbol in _VALUES:
-        while number >= value:
-            result.append(symbol)
-            number -= value
-    return "".join(result)
+        raise ValueError("number must be between 1 and 3999")
+    return _encode(number)
 
 
 def from_roman(text: str) -> int:
@@ -36,6 +40,6 @@ def from_roman(text: str) -> int:
         while s.startswith(symbol, index):
             total += value
             index += len(symbol)
-    if not s or index != len(s) or total == 0 or to_roman(total) != s:
-        raise ValueError(f"Invalid Roman numeral: {text!r}")
+    if not s or index != len(s) or not 1 <= total <= 3999 or _encode(total) != s:
+        raise ValueError(f"{text!r} is not a valid Roman numeral")
     return total
