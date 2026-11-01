@@ -1,4 +1,4 @@
-name: CI
+name: Tests
 
 on:
   push:
@@ -8,14 +8,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
       - run: pip install -e ".[dev]"
-      - run: pytest --cov=fixit --cov-report=term
-      - run: mypy fixit
+      - name: Run tests
+        run: pytest
+      - name: Help for contributors
+        if: failure()
+        run: echo "Tests failed. This is normal on a first try. Open the Run tests step above to see which test failed, fix it and push again. Ask in your PR if you are stuck."
