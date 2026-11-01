@@ -178,13 +178,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     try:
         args = parser.parse_args(argv)
-
-        if args.command == "shell":
-            from fixit.shell import run_shell
-
-            run_shell()
-            return 0
-        
         COMMAND_TABLE[args.command](args)
         return 0
     except ValueError as e:
