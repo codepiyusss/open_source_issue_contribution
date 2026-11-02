@@ -7,7 +7,16 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Optional
 
-from fixit import __version__, convert, jsonfmt, password, roman, textutils, wordcount
+from fixit import (
+    __version__,
+    convert,
+    jsonfmt,
+    lorem,
+    password,
+    roman,
+    textutils,
+    wordcount,
+)
 
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
@@ -94,6 +103,10 @@ def run_roman(args: argparse.Namespace) -> None:
         raise ValueError(str(exc)) from exc
 
 
+def run_lorem(args: argparse.Namespace) -> None:
+    print(lorem.generate(args.words))
+
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -105,6 +118,7 @@ COMMAND_TABLE = {
     "slugify": run_slugify,
     "top-words": run_top_words,
     "roman": run_roman,
+    "lorem": run_lorem,
 }
 
 
@@ -157,6 +171,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     rom = sub.add_parser("roman", help="convert numbers and Roman numerals")
     rom.add_argument("value")
+
+    lr = sub.add_parser("lorem", help="generate placeholder lorem ipsum text")
+    lr.add_argument(
+        "--words", type=int, default=20, help="number of words (default: 20)"
+    )
 
     return parser
 
