@@ -21,6 +21,8 @@ from fixit import (
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
     "f2c": convert.fahrenheit_to_celsius,
+    "c2k": convert.celsius_to_kelvin,
+    "k2c": convert.kelvin_to_celsius,
     "km2mi": convert.km_to_miles,
     "mi2km": convert.miles_to_km,
 }

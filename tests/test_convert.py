@@ -2,7 +2,9 @@ import pytest
 
 from fixit.convert import (
     celsius_to_fahrenheit,
+    celsius_to_kelvin,
     fahrenheit_to_celsius,
+    kelvin_to_celsius,
     km_to_miles,
     miles_to_km,
 )
@@ -38,3 +40,21 @@ def test_absolute_zero():
 
 def test_float_km_to_miles():
     assert km_to_miles(1.5) == pytest.approx(0.932056788)
+
+
+def test_c_to_k():
+    assert celsius_to_kelvin(0) == pytest.approx(273.15)
+
+
+def test_k_to_c():
+    assert kelvin_to_celsius(273.15) == pytest.approx(0)
+
+
+def test_c_to_k_below_absolute_zero_raises():
+    with pytest.raises(ValueError):
+        celsius_to_kelvin(-300)
+
+
+def test_k_to_c_negative_raises():
+    with pytest.raises(ValueError):
+        kelvin_to_celsius(-1)
