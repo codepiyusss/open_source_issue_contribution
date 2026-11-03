@@ -1,5 +1,5 @@
+import pytest
 from fixit.cli import main
-
 
 def test_version(capsys):
     try:
@@ -71,3 +71,9 @@ def test_roman_invalid_numeral(capsys):
 
     assert result == 1
     assert "not a valid Roman numeral" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("value", ["nan", "inf"])
+def test_convert_rejects_non_finite_values(value):
+    with pytest.raises(SystemExit):
+        main(["convert", value, "c2f"])

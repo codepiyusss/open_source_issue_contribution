@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+import math
 import uuid
 from collections.abc import Sequence
 from pathlib import Path
@@ -128,6 +129,13 @@ COMMAND_TABLE = {
     "prime": run_prime,
 }
 
+def finite_float(value: str) -> float:
+    number = float(value)
+
+    if not math.isfinite(number):
+        raise argparse.ArgumentTypeError("value must be a finite number")
+
+    return number
 
 def build_parser() -> argparse.ArgumentParser:
     """Build the argument parser for the fixit command-line interface.
@@ -148,7 +156,7 @@ def build_parser() -> argparse.ArgumentParser:
     wc.add_argument("--file", type=Path, help="read text from a file")
 
     cv = sub.add_parser("convert", help="convert units")
-    cv.add_argument("value", type=float)
+    cv.add_argument("value", type=finite_float)
     cv.add_argument("kind", choices=sorted(CONVERSIONS))
 
     pw = sub.add_parser("password", help="generate a password")
