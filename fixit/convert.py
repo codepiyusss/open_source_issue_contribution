@@ -22,6 +22,33 @@ def fahrenheit_to_celsius(f: float) -> float:
     return (f - 32) * 5 / 9
 
 
+def celsius_to_kelvin(c: float) -> float:
+    """Convert a temperature from Celsius to Kelvin.
+
+    Raises ValueError if the result would be below absolute zero.
+
+    Example:
+        celsius_to_kelvin(0) returns 273.15.
+    """
+    kelvin = c + 273.15
+    if kelvin < 0:
+        raise ValueError("temperature cannot be below absolute zero (0 K)")
+    return kelvin
+
+
+def kelvin_to_celsius(k: float) -> float:
+    """Convert a temperature from Kelvin to Celsius.
+
+    Raises ValueError if the Kelvin value is negative.
+
+    Example:
+        kelvin_to_celsius(273.15) returns 0.
+    """
+    if k < 0:
+        raise ValueError("Kelvin value cannot be negative")
+    return k - 273.15
+
+
 def km_to_miles(km: float) -> float:
     """Convert kilometers to miles.
 
