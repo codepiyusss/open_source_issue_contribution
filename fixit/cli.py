@@ -7,7 +7,16 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import Optional
 
-from fixit import __version__, convert, jsonfmt, password, roman, textutils, wordcount
+from fixit import (
+    __version__, 
+    convert, 
+    jsonfmt, 
+    password, 
+    primes,
+    roman, 
+    textutils, 
+    wordcount,
+)
 
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
@@ -75,6 +84,15 @@ def run_top_words(args: argparse.Namespace) -> None:
 def run_slugify(args: argparse.Namespace) -> None:
     print(textutils.slugify(args.text))
 
+def run_prime(args: argparse.Namespace) -> None:
+    """Check whether a number is prime."""
+    number = args.number
+
+    if primes.is_prime(number):
+        print(f"{number} is prime")
+    else:
+        print(f"{number} is not prime")
+
 
 def run_roman(args: argparse.Namespace) -> None:
     value = args.value
@@ -105,6 +123,7 @@ COMMAND_TABLE = {
     "slugify": run_slugify,
     "top-words": run_top_words,
     "roman": run_roman,
+    "prime": run_prime,
 }
 
 
@@ -157,6 +176,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     rom = sub.add_parser("roman", help="convert numbers and Roman numerals")
     rom.add_argument("value")
+
+    prime = sub.add_parser("prime", help="check whether a number is prime")
+    prime.add_argument("number", type=int)
 
     return parser
 
