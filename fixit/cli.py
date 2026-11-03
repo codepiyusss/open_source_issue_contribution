@@ -11,6 +11,7 @@ from fixit import (
     __version__, 
     convert, 
     jsonfmt, 
+    lorem,
     password, 
     primes,
     roman, 
@@ -130,6 +131,7 @@ COMMAND_TABLE = {
     "top-words": run_top_words,
     "roman": run_roman,
     "prime": run_prime,
+    "lorem": run_lorem,
 }
 
 
@@ -185,6 +187,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     prime = sub.add_parser("prime", help="check whether a number is prime")
     prime.add_argument("number", type=int)
+
+    lorem_parser = sub.add_parser("lorem", help="generate lorem ipsum text")
+    lorem_parser.add_argument("--words", type=int, default=20)
 
     return parser
 
