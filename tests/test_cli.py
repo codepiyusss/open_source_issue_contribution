@@ -1,5 +1,5 @@
+import pytest
 from fixit.cli import main
-
 
 def test_version(capsys):
     try:
@@ -43,3 +43,37 @@ def test_top_words_command_defaults_to_three(capsys):
 
     assert result == 0
     assert capsys.readouterr().out == "one: 1\ntwo: 1\nthree: 1\n"
+
+
+def test_roman_number_to_numeral(capsys):
+    result = main(["roman", "1994"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "MCMXCIV"
+
+
+def test_roman_numeral_to_number(capsys):
+    result = main(["roman", "MCMXCIV"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "1994"
+
+
+def test_roman_out_of_range(capsys):
+    result = main(["roman", "4000"])
+
+    assert result == 1
+    assert "between 1 and 3999" in capsys.readouterr().err
+
+
+def test_roman_invalid_numeral(capsys):
+    result = main(["roman", "IIII"])
+
+    assert result == 1
+    assert "not a valid Roman numeral" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("value", ["nan", "inf"])
+def test_convert_rejects_non_finite_values(value):
+    with pytest.raises(SystemExit):
+        main(["convert", value, "c2f"])

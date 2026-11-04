@@ -2,16 +2,29 @@
 
 import argparse
 import sys
+import math
 import uuid
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Optional
 
-from fixit import __version__, convert, jsonfmt, password, textutils, wordcount
+from fixit import (
+    __version__, 
+    convert, 
+    jsonfmt, 
+    lorem,
+    password, 
+    primes,
+    roman, 
+    textutils, 
+    wordcount,
+)
 
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
     "f2c": convert.fahrenheit_to_celsius,
+    "c2k": convert.celsius_to_kelvin,
+    "k2c": convert.kelvin_to_celsius,
     "km2mi": convert.km_to_miles,
     "mi2km": convert.miles_to_km,
 }
@@ -75,6 +88,15 @@ def run_top_words(args: argparse.Namespace) -> None:
 def run_slugify(args: argparse.Namespace) -> None:
     print(textutils.slugify(args.text))
 
+def run_prime(args: argparse.Namespace) -> None:
+    """Check whether a number is prime."""
+    number = args.number
+
+    if primes.is_prime(number):
+        print(f"{number} is prime")
+    else:
+        print(f"{number} is not prime")
+
 
 def run_roman(args: argparse.Namespace) -> None:
     value = args.value
@@ -103,6 +125,10 @@ def run_leap_year(args: argparse.Namespace) -> None:
     except ValueError as exc:
         raise ValueError(f"Invalid year: {args.year}") from exc
 
+def run_lorem(args: argparse.Namespace) -> None:
+    print(lorem.generate(args.words))
+
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -115,8 +141,17 @@ COMMAND_TABLE = {
     "top-words": run_top_words,
     "roman": run_roman,
     "leap-year": run_leap_year,
+    "prime": run_prime,
+    "lorem": run_lorem,
 }
 
+def finite_float(value: str) -> float:
+    number = float(value)
+
+    if not math.isfinite(number):
+        raise argparse.ArgumentTypeError("value must be a finite number")
+
+    return number
 
 def build_parser() -> argparse.ArgumentParser:
     """Build the argument parser for the fixit command-line interface.
@@ -137,7 +172,7 @@ def build_parser() -> argparse.ArgumentParser:
     wc.add_argument("--file", type=Path, help="read text from a file")
 
     cv = sub.add_parser("convert", help="convert units")
-    cv.add_argument("value", type=float)
+    cv.add_argument("value", type=finite_float)
     cv.add_argument("kind", choices=sorted(CONVERSIONS))
 
     pw = sub.add_parser("password", help="generate a password")
@@ -170,6 +205,12 @@ def build_parser() -> argparse.ArgumentParser:
     ly = sub.add_parser("leap-year", help="check if a year is a leap year")
     ly.add_argument("year")
 
+    prime = sub.add_parser("prime", help="check whether a number is prime")
+    prime.add_argument("number", type=int)
+
+    lorem_parser = sub.add_parser("lorem", help="generate lorem ipsum text")
+    lorem_parser.add_argument("--words", type=int, default=20)
+
     return parser
 
 
@@ -190,6 +231,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     try:
         args = parser.parse_args(argv)
+
+        if args.command == "shell":
+            from fixit.shell import run_shell
+
+            run_shell()
+            return 0
+        
         COMMAND_TABLE[args.command](args)
         return 0
     except ValueError as e:

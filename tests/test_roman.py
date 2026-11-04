@@ -37,7 +37,7 @@ def test_to_roman_rejects_out_of_range(value):
         to_roman(value)
 
 
-@pytest.mark.parametrize("numeral", ["IIII", "VX", "IC", "MMMM", "ABC"])
+@pytest.mark.parametrize("numeral", ["IIII", "VX", "IC", "MMMM", "ABC", ""])
 def test_from_roman_rejects_invalid_numerals(numeral):
     with pytest.raises(ValueError, match="not a valid Roman numeral"):
         from_roman(numeral)
