@@ -12,6 +12,7 @@ from fixit import (
     __version__, 
     convert, 
     jsonfmt, 
+    lorem,
     password, 
     primes,
     roman, 
@@ -115,6 +116,10 @@ def run_roman(args: argparse.Namespace) -> None:
         raise ValueError(str(exc)) from exc
 
 
+def run_lorem(args: argparse.Namespace) -> None:
+    print(lorem.generate(args.words))
+
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -127,6 +132,7 @@ COMMAND_TABLE = {
     "top-words": run_top_words,
     "roman": run_roman,
     "prime": run_prime,
+    "lorem": run_lorem,
 }
 
 def finite_float(value: str) -> float:
@@ -189,6 +195,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     prime = sub.add_parser("prime", help="check whether a number is prime")
     prime.add_argument("number", type=int)
+
+    lorem_parser = sub.add_parser("lorem", help="generate lorem ipsum text")
+    lorem_parser.add_argument("--words", type=int, default=20)
 
     return parser
 
