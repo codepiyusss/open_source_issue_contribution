@@ -41,11 +41,14 @@ def run_wc(args: argparse.Namespace) -> None:
     else:
         raise ValueError("Error: provide text or use --file")
 
-    print(
-        f"words={wordcount.count_words(text)} "
-        f"lines={wordcount.count_lines(text)} "
-        f"chars={wordcount.count_chars(text)}"
-    )
+    if not args.json:
+        print(
+            f"words={wordcount.count_words(text)} "
+            f"lines={wordcount.count_lines(text)} "
+            f"chars={wordcount.count_chars(text)}"
+        )
+    else:
+        print(wordcount.prepare_json(text))
 
 
 def run_convert(args: argparse.Namespace) -> None:
@@ -160,6 +163,7 @@ def build_parser() -> argparse.ArgumentParser:
     wc = sub.add_parser("wc", help="count words, lines and characters")
     wc.add_argument("text", nargs="?")
     wc.add_argument("--file", type=Path, help="read text from a file")
+    wc.add_argument("--json", action="store_true", help="output counts as JSON")
 
     cv = sub.add_parser("convert", help="convert units")
     cv.add_argument("value", type=finite_float)

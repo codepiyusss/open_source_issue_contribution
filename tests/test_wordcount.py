@@ -1,6 +1,7 @@
 import pytest
 
-from fixit.wordcount import count_chars, count_lines, count_words, top_words
+from fixit.wordcount import count_chars, count_lines, count_words, top_words, prepare_json
+import json
 
 
 def test_count_words_simple():
@@ -46,3 +47,12 @@ def test_top_words_empty_text():
 def test_top_words_requires_positive_n():
     with pytest.raises(ValueError, match="at least 1"):
         top_words("hello", 0)
+
+def test_json_output():
+    result = json.loads(prepare_json("a b"))
+
+    assert result == {
+        "words": 2,
+        "lines": 1,
+        "chars": 3,
+    }
