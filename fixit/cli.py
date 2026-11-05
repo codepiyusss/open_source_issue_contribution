@@ -118,7 +118,16 @@ def run_roman(args: argparse.Namespace) -> None:
         print(roman.to_roman(number))
     except ValueError as exc:
         raise ValueError(str(exc)) from exc
-
+def run_leap_year(args: argparse.Namespace) -> None:
+    try:
+        year = int(args.year)
+        is_leap = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+        if is_leap:
+            print(f"{year} is a leap year.")
+        else:
+            print(f"{year} is not a leap year.")
+    except ValueError as exc:
+        raise ValueError(f"Invalid year: {args.year}") from exc
 
 def run_lorem(args: argparse.Namespace) -> None:
     print(lorem.generate(args.words))
@@ -139,6 +148,7 @@ COMMAND_TABLE = {
     "slugify": run_slugify,
     "top-words": run_top_words,
     "roman": run_roman,
+    "leap-year": run_leap_year,
     "prime": run_prime,
     "lorem": run_lorem,
     "coin": run_coin,
@@ -201,7 +211,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     rom = sub.add_parser("roman", help="convert numbers and Roman numerals")
-    rom.add_argument("value")
+    rom.add_argument("value") 
+    ly = sub.add_parser("leap-year", help="check if a year is a leap year")
+    ly.add_argument("year")
 
     prime = sub.add_parser("prime", help="check whether a number is prime")
     prime.add_argument("number", type=int)
