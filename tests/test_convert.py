@@ -58,3 +58,15 @@ def test_c_to_k_below_absolute_zero_raises():
 def test_k_to_c_negative_raises():
     with pytest.raises(ValueError):
         kelvin_to_celsius(-1)
+
+
+def test_temperature_conversions_reject_below_absolute_zero_and_accept_boundary():
+    with pytest.raises(ValueError):
+        celsius_to_fahrenheit(-273.150001)
+    assert celsius_to_fahrenheit(-273.15) == pytest.approx(-459.67)
+    assert celsius_to_fahrenheit(-273.149999) == pytest.approx(-459.6699982)
+
+    with pytest.raises(ValueError):
+        fahrenheit_to_celsius(-459.670001)
+    assert fahrenheit_to_celsius(-459.67) == pytest.approx(-273.15)
+    assert fahrenheit_to_celsius(-459.669999) == pytest.approx(-273.1499994444)
