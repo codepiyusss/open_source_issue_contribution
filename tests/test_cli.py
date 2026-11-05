@@ -1,5 +1,6 @@
 import pytest
 from fixit.cli import main
+import json
 
 def test_version(capsys):
     try:
@@ -29,6 +30,19 @@ def test_wc_file_not_found(capsys):
 
     assert result == 1
     assert "missing_file.txt" in capsys.readouterr().err
+
+def test_wc_json_output(capsys):
+    result = main(["wc", "a b", "--json"])
+
+    captured = capsys.readouterr()
+    output = json.loads(captured.out)
+
+    assert result == 0
+    assert output == {
+        "words": 2,
+        "lines": 1,
+        "chars": 3,
+    }
 
 
 def test_top_words_command(capsys):

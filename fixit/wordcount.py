@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from collections import Counter
-
+import json
 
 def count_words(text: str) -> int:
     """Count the words in the given text.
@@ -35,6 +35,17 @@ def count_chars(text: str) -> int:
     """
     return len(text)
 
+def prepare_json(text: str) -> str:
+    """Prepare a JSON string from the given text.
+
+    Example:
+        prepare_json("a b") returns '{"words": 2, "lines": 1, "chars": 3}'.
+    """
+    wcjson = {}
+    wcjson["words"] = count_words(text)
+    wcjson["lines"] = count_lines(text)
+    wcjson["chars"] = count_chars(text)
+    return json.dumps(wcjson)
 
 def top_words(text: str, n: int = 3) -> list[tuple[str, int]]:
     """Return up to n most frequent words and their counts.
