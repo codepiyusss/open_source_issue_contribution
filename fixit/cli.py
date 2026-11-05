@@ -10,6 +10,7 @@ from typing import Optional
 
 from fixit import (
     __version__, 
+    coin,
     convert, 
     jsonfmt, 
     lorem,
@@ -119,6 +120,10 @@ def run_roman(args: argparse.Namespace) -> None:
 def run_lorem(args: argparse.Namespace) -> None:
     print(lorem.generate(args.words))
 
+def run_coin(args: argparse.Namespace) -> None:
+    for result in coin.flip(args.count):
+        print(result)
+
 
 COMMAND_TABLE = {
     "wc": run_wc,
@@ -133,6 +138,7 @@ COMMAND_TABLE = {
     "roman": run_roman,
     "prime": run_prime,
     "lorem": run_lorem,
+    "coin": run_coin,
 }
 
 def finite_float(value: str) -> float:
@@ -198,6 +204,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     lorem_parser = sub.add_parser("lorem", help="generate lorem ipsum text")
     lorem_parser.add_argument("--words", type=int, default=20)
+
+    cn = sub.add_parser("coin", help="flip a coin")
+    cn.add_argument("--count", type=int, default=1, help="number of flips (default: 1)")
 
     return parser
 
