@@ -2,6 +2,8 @@
 
 KM_PER_MILE = 1.609344
 LBS_PER_KG = 2.20462
+ABSOLUTE_ZERO_CELSIUS = -273.15
+ABSOLUTE_ZERO_FAHRENHEIT = -459.67
 
 
 def celsius_to_fahrenheit(c: float) -> float:
@@ -10,6 +12,8 @@ def celsius_to_fahrenheit(c: float) -> float:
     Example:
         celsius_to_fahrenheit(0) returns 32.
     """
+    if c < ABSOLUTE_ZERO_CELSIUS:
+        raise ValueError("temperature cannot be below absolute zero")
     return c * 9 / 5 + 32
 
 
@@ -19,6 +23,8 @@ def fahrenheit_to_celsius(f: float) -> float:
     Example:
         fahrenheit_to_celsius(32) returns 0.
     """
+    if f < ABSOLUTE_ZERO_FAHRENHEIT:
+        raise ValueError("temperature cannot be below absolute zero")
     return (f - 32) * 5 / 9
 
 
