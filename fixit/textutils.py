@@ -34,3 +34,34 @@ def slugify(text: str) -> str:
     text = re.sub(r"[^\w\s-]", "", text)
     text = re.sub(r"[\s_-]+", "-", text)
     return text.strip("-")
+
+def convert_case(style: str, text: str) -> str:
+    """Convert text into the specified naming convention.
+
+    Supported styles:
+        snake: hello_world
+        kebab: hello-world
+        camel: helloWorld
+        pascal: HelloWorld
+    """
+    valid_styles = {"snake", "kebab", "camel", "pascal"}
+
+    if style not in valid_styles:
+        raise ValueError(f"Unsupported style: {style}")
+
+    words = text.replace("-", " ").replace("_", " ").split()
+    words = [word.lower() for word in words]
+
+    if style == "snake":
+        return "_".join(words)
+
+    if style == "kebab":
+        return "-".join(words)
+
+    if style == "camel":
+        return words[0] + "".join(word.capitalize() for word in words[1:]) if words else ""
+
+    if style == "pascal":
+        return "".join(word.capitalize() for word in words)
+
+    return ""
