@@ -14,6 +14,30 @@ def test_palindrome_command(capsys):
     main(["palindrome", "level"])
     assert capsys.readouterr().out.strip() == "True"
 
+@pytest.mark.parametrize(
+    ("style", "expected"),
+    [
+        ("snake", "hello_world"),
+        ("kebab", "hello-world"),
+        ("camel", "helloWorld"),
+        ("pascal", "HelloWorld"),
+    ],
+)
+def test_case_command(capsys, style, expected):
+    result = main(["case", style, "Hello World"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == expected
+
+def test_case_command_mixed_separators(capsys):
+    result = main(["case", "camel", "HELLO_world-example"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "helloWorldExample"
+
+def test_case_command_invalid_style():
+    with pytest.raises(SystemExit):
+        main(["case", "random", "Hello World"])
 
 def test_wc_file_option(tmp_path, capsys):
     file_path = tmp_path / "sample.txt"

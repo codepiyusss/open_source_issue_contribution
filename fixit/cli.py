@@ -9,15 +9,15 @@ from pathlib import Path
 from typing import Optional
 
 from fixit import (
-    __version__, 
+    __version__,
     coin,
-    convert, 
-    jsonfmt, 
+    convert,
+    jsonfmt,
     lorem,
-    password, 
+    password,
     primes,
-    roman, 
-    textutils, 
+    roman,
+    textutils,
     wordcount,
 )
 
@@ -92,6 +92,10 @@ def run_top_words(args: argparse.Namespace) -> None:
 def run_slugify(args: argparse.Namespace) -> None:
     print(textutils.slugify(args.text))
 
+def run_case(args: argparse.Namespace) -> None:
+    """Convert text into the requested naming convention."""
+    print(textutils.convert_case(args.style, args.text))
+
 def run_prime(args: argparse.Namespace) -> None:
     """Check whether a number is prime."""
     number = args.number
@@ -146,6 +150,7 @@ COMMAND_TABLE = {
     "palindrome": run_palindrome,
     "reverse": run_reverse,
     "slugify": run_slugify,
+    "case": run_case,
     "top-words": run_top_words,
     "roman": run_roman,
     "leap-year": run_leap_year,
@@ -204,6 +209,17 @@ def build_parser() -> argparse.ArgumentParser:
     sg = sub.add_parser("slugify", help="convert text into a URL-friendly slug")
     sg.add_argument("text")
 
+    case_parser = sub.add_parser(
+        "case",
+         help="convert text between naming conventions"
+    )
+    case_parser.add_argument(
+        "style",
+        choices=["snake", "kebab", "camel", "pascal"],
+        help="target naming convention"
+    )
+    case_parser.add_argument("text", help="text to convert")
+
     top = sub.add_parser("top-words", help="show the most frequent words")
     top.add_argument("text")
     top.add_argument(
@@ -211,7 +227,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     rom = sub.add_parser("roman", help="convert numbers and Roman numerals")
-    rom.add_argument("value") 
+    rom.add_argument("value")
     ly = sub.add_parser("leap-year", help="check if a year is a leap year")
     ly.add_argument("year")
 
@@ -250,7 +266,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
             run_shell()
             return 0
-        
+
         COMMAND_TABLE[args.command](args)
         return 0
     except ValueError as e:
