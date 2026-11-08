@@ -14,7 +14,7 @@ def generate(
     """
     if length <= 0:
         raise ValueError("Password length must be greater then 0!")
-    chars = string.ascii_letters
+    chars = string.digits
     if use_digits:
         chars += string.digits
     if use_symbols:
