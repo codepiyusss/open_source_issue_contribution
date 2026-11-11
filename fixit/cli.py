@@ -1,8 +1,8 @@
 """Command line entry point: `fixit <command>`."""
 
 import argparse
-import sys
 import math
+import sys
 import uuid
 from collections.abc import Sequence
 from pathlib import Path
@@ -20,6 +20,7 @@ from fixit import (
     textutils,
     wordcount,
 )
+from fixit.config import load_config
 
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
@@ -73,8 +74,7 @@ def run_json(args: argparse.Namespace) -> None:
     try:
         print(jsonfmt.format_json(args.raw))
     except ValueError as e:
-        raise ValueError(f"Error: invalid JSON - {e}")
-
+        raise ValueError(f"Error: invalid JSON - {e}") from e
 
 def run_palindrome(args: argparse.Namespace) -> None:
     print(textutils.is_palindrome(args.text))
@@ -191,7 +191,14 @@ def build_parser() -> argparse.ArgumentParser:
     cv.add_argument("kind", choices=sorted(CONVERSIONS))
 
     pw = sub.add_parser("password", help="generate a password")
-    pw.add_argument("--length", type=int, default=12)
+
+    pw.add_argument(
+        "--length",
+        type=int,
+        default=None,
+        help="password length (default: 12; configurable)",
+    )
+
     pw.add_argument("--symbols", action="store_true")
 
     uid = sub.add_parser("uuid", help="generate UUIDs")
@@ -243,7 +250,10 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
+def main(
+    argv: Optional[Sequence[str]] = None,
+    config_path: Optional[Path] = None,
+) -> int:
     """Run a fixit command and return its exit status.
 
     Example:
@@ -267,9 +277,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             run_shell()
             return 0
 
+        config = load_config(config_path)
+
+        if args.command == "password" and args.length is None:
+            args.length = config.get("password", {}).get("length", 12)
+
         COMMAND_TABLE[args.command](args)
         return 0
-    except ValueError as e:
+
+    except (TypeError, ValueError) as e:
         print(str(e), file=sys.stderr)
         return 1
 

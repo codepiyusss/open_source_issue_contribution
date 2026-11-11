@@ -47,6 +47,33 @@ fixit password --length 16 --symbols
 fixit json '{"name":"fixit"}'
 fixit palindrome "Level"
 fixit reverse "open source is fun"
+
+### Configuration
+
+`fixit` supports user defaults through a JSON configuration file located at `~/.fixit.json`.
+
+For example, to configure the default password length:
+
+```json
+{
+  "password": {
+    "length": 16
+  }
+}
+```
+
+Running `fixit password` will now generate a 16-character password.
+
+Command-line options always take precedence over configuration:
+
+```bash
+fixit password --length 8
+```
+
+If the configuration file does not exist, the default password length remains 12.
+
+Invalid JSON or an invalid password length produces a clear error.
+
 ```
 
 Some of these will give you wrong answers. That is the point. 😉
