@@ -1,8 +1,9 @@
 """Command line entry point: `fixit <command>`."""
 
 import argparse
-import sys
+import logging
 import math
+import sys
 import uuid
 from collections.abc import Sequence
 from pathlib import Path
@@ -21,6 +22,7 @@ from fixit import (
     wordcount,
 )
 
+logger = logging.getLogger(__name__)
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
     "f2c": convert.fahrenheit_to_celsius,
@@ -179,6 +181,12 @@ def build_parser() -> argparse.ArgumentParser:
         prog="fixit", description="A tiny toolbox to practice open source."
     )
     parser.add_argument("--version", action="version", version=f"fixit {__version__}")
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="enable verbose logging",
+    )
     sub = parser.add_subparsers(dest="command")
 
     wc = sub.add_parser("wc", help="count words, lines and characters")
@@ -260,6 +268,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     try:
         args = parser.parse_args(argv)
+        logging.basicConfig(
+            level=logging.DEBUG if args.verbose else logging.WARNING,
+            format="%(levelname)s: %(message)s",
+            stream=sys.stderr,
+            force=True,
+        )
+
+        if args.command is not None:
+            logger.debug("running command %s", args.command)
 
         if args.command == "shell":
             from fixit.shell import run_shell
