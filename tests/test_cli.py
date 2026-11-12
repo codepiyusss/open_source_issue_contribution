@@ -1,6 +1,9 @@
-import pytest
-from fixit.cli import main
 import json
+
+import pytest
+
+from fixit.cli import main
+
 
 def test_version(capsys):
     try:
@@ -115,3 +118,24 @@ def test_roman_invalid_numeral(capsys):
 def test_convert_rejects_non_finite_values(value):
     with pytest.raises(SystemExit):
         main(["convert", value, "c2f"])
+
+
+@pytest.mark.parametrize("flag", ["--verbose", "-v"])
+def test_verbose_flag_logs_command_to_stderr(capsys, flag):
+    result = main([flag, "wc", "hello world"])
+
+    captured = capsys.readouterr()
+
+    assert result == 0
+    assert captured.out.strip() == "words=2 lines=1 chars=11"
+    assert "DEBUG: running command wc" in captured.err
+
+
+def test_without_verbose_does_not_log_debug(capsys):
+    result = main(["wc", "hello world"])
+
+    captured = capsys.readouterr()
+
+    assert result == 0
+    assert captured.out.strip() == "words=2 lines=1 chars=11"
+    assert "DEBUG" not in captured.err
