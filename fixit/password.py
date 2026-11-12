@@ -1,22 +1,33 @@
-"""Random password generator."""
-
 import random
 import string
 
+def generate(length=8, use_digits=True, use_symbols=True):
+    letter_pool = string.ascii_letters
+    digit_pool = string.digits if use_digits else ""
+    symbol_pool = string.punctuation if use_symbols else ""
 
-def generate(
-    length: int = 12, use_digits: bool = True, use_symbols: bool = False
-) -> str:
-    """Generate a random password of the given length.
-
-    Example:
-        generate(4, use_digits=False) returns a 4-character password.
-    """
-    if length <= 0:
-        raise ValueError("Password length must be greater then 0!")
-    chars = string.ascii_letters
+    # Pick 1 guaranteed character from each active required pool
+    required_chars = [random.choice(letter_pool)]
     if use_digits:
-        chars += string.digits
+        required_chars.append(random.choice(digit_pool))
     if use_symbols:
-        chars += string.punctuation
-    return "".join(random.choice(chars) for _ in range(length))
+        required_chars.append(random.choice(symbol_pool))
+
+    # Raise ValueError if requested length is smaller than required types
+    if length < len(required_chars):
+        raise ValueError(
+            f"Length {length} is too short for the required character types."
+        )
+
+    # Build the full pool of allowed characters
+    full_pool = letter_pool + digit_pool + symbol_pool
+
+    # Fill the remaining character slots
+    remaining_slots = length - len(required_chars)
+    remaining_chars = [random.choice(full_pool) for _ in range(remaining_slots)]
+
+    # Combine and shuffle so guaranteed characters aren't always first
+    all_chars = required_chars + remaining_chars
+    random.shuffle(all_chars)
+
+    return "".join(all_chars)
