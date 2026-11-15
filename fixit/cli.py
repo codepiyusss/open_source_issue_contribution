@@ -13,6 +13,7 @@ from fixit import (
     __version__,
     coin,
     convert,
+    health,
     jsonfmt,
     lorem,
     password,
@@ -143,6 +144,20 @@ def run_coin(args: argparse.Namespace) -> None:
         print(result)
 
 
+def run_bmi(args: argparse.Namespace) -> None:
+    bmi = health.calculate_bmi(args.kg, args.cm)
+
+    if bmi < 18.5:
+        category = "Underweight"
+    elif bmi < 25:
+        category = "Normal"
+    elif bmi < 30:
+        category = "Overweight"
+    else:
+        category = "Obese"
+
+    print(f"{bmi:.1f} {category}")
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -159,6 +174,9 @@ COMMAND_TABLE = {
     "prime": run_prime,
     "lorem": run_lorem,
     "coin": run_coin,
+    "bmi": run_bmi,
+
+
 }
 
 def finite_float(value: str) -> float:
@@ -247,6 +265,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     cn = sub.add_parser("coin", help="flip a coin")
     cn.add_argument("--count", type=int, default=1, help="number of flips (default: 1)")
+
+    bmi = sub.add_parser("bmi", help="calculate Body Mass Index")
+    bmi.add_argument("--kg", type=finite_float, required=True, help="weight in kilograms")
+    bmi.add_argument("--cm", type=finite_float, required=True, help="height in centimeters")
 
     return parser
 
