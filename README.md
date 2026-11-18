@@ -8,8 +8,7 @@
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
 ![good first issues](https://img.shields.io/badge/good%20first%20issues-30%2B-orange)
 [![Ruff](https://github.com/codepiyusss/open_source_issue_contribution/actions/workflows/ruff.yml/badge.svg)](https://github.com/codepiyusss/open_source_issue_contribution/actions/workflows/ruff.yml)
-[![CI](https://github.com/codepiyusss/open_source_issue_contribution/actions/workflows/ci.yml/badge.svg)](https://github.com/codepiyusss/open_source_issue_contribution/actions/workflows/ci.yml)
-
+![CI](https://github.com/codepiyusss/open_source_issue_contribution/actions/workflows/ci.yml/badge.svg)
 ## 🎯 What is this?
 
 `fixit` is a tiny command line toolbox (word counter, unit converter, password generator, JSON formatter, text tools). It is **deliberately imperfect**: some tools have bugs, some tests are missing and some features are not built yet. Every problem is an open [issue](../../issues) you can pick up.
