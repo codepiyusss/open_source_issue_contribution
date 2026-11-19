@@ -14,6 +14,7 @@ from fixit import (
     coin,
     convert,
     health,
+    fizzbuzz,
     jsonfmt,
     lorem,
     password,
@@ -158,6 +159,11 @@ def run_bmi(args: argparse.Namespace) -> None:
 
     print(f"{bmi:.1f} {category}")
 
+def run_fizzbuzz(args: argparse.Namespace) -> None:
+    """Print FizzBuzz values from 1 to n."""
+    for item in fizzbuzz.fizzbuzz(args.n):
+        print(item)
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -175,6 +181,7 @@ COMMAND_TABLE = {
     "lorem": run_lorem,
     "coin": run_coin,
     "bmi": run_bmi,
+    "fizzbuzz": run_fizzbuzz,
 
 
 }
@@ -269,6 +276,9 @@ def build_parser() -> argparse.ArgumentParser:
     bmi = sub.add_parser("bmi", help="calculate Body Mass Index")
     bmi.add_argument("--kg", type=finite_float, required=True, help="weight in kilograms")
     bmi.add_argument("--cm", type=finite_float, required=True, help="height in centimeters")
+
+    fb = sub.add_parser("fizzbuzz", help="print FizzBuzz sequence up to n")
+    fb.add_argument("n", type=int, help="upper limit (must be at least 1)")
 
     return parser
 
