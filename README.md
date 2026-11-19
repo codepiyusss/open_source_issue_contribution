@@ -67,6 +67,31 @@ Some of these will give you wrong answers. That is the point. 😉
 - Only meaningful contributions are merged. Spam or empty PRs will be closed.
 - Be kind. Read the [Code of Conduct](CODE_OF_CONDUCT.md).
 
+## 🪟 Windows troubleshooting
+
+**Activate the virtual environment** (run these from the project folder):
+
+- PowerShell: `venv\Scripts\Activate.ps1`
+- cmd: `venv\Scripts\activate.bat`
+
+If PowerShell says that running scripts is disabled, allow local scripts for your user account once, then activate again:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+Your prompt should start with `(venv)` after activation.
+
+**`fixit` is not recognized (or not found):**
+
+- Make sure the venv is activated, then run `pip install -e ".[dev]"` again. The `fixit` command is installed into `venv\Scripts`, which is only on your PATH while the venv is active.
+- Check where it is installed with `where fixit` (cmd) or `Get-Command fixit` (PowerShell). No output means the install did not work. Re-run the install step inside the activated venv.
+- If you do not want to fix PATH, run the tool as a module instead. This works from any terminal where the venv is active:
+
+  ```bash
+  python -m fixit wc "hello world"
+  ```
+
 ## 📄 License
 
 MIT. See [LICENSE](LICENSE).
