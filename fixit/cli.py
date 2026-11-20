@@ -15,6 +15,7 @@ from fixit import (
     convert,
     health,
     fizzbuzz,
+    hashing,
     jsonfmt,
     lorem,
     password,
@@ -164,6 +165,11 @@ def run_fizzbuzz(args: argparse.Namespace) -> None:
     for item in fizzbuzz.fizzbuzz(args.n):
         print(item)
 
+
+def run_hash(args: argparse.Namespace) -> None:
+    """Print the hex digest of the given text."""
+    print(hashing.hash_text(args.text, args.algo))
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -182,6 +188,7 @@ COMMAND_TABLE = {
     "coin": run_coin,
     "bmi": run_bmi,
     "fizzbuzz": run_fizzbuzz,
+    "hash": run_hash,
 
 
 }
@@ -279,6 +286,15 @@ def build_parser() -> argparse.ArgumentParser:
 
     fb = sub.add_parser("fizzbuzz", help="print FizzBuzz sequence up to n")
     fb.add_argument("n", type=int, help="upper limit (must be at least 1)")
+
+    hs = sub.add_parser("hash", help="print the hash of a text")
+    hs.add_argument("text", help="text to hash")
+    hs.add_argument(
+        "--algo",
+        choices=hashing.SUPPORTED_ALGORITHMS,
+        default="sha256",
+        help="hash algorithm (default: sha256)",
+    )
 
     return parser
 
