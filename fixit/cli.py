@@ -11,6 +11,7 @@ from typing import Optional
 
 from fixit import (
     __version__,
+    bases,
     coin,
     convert,
     health,
@@ -164,6 +165,11 @@ def run_fizzbuzz(args: argparse.Namespace) -> None:
     for item in fizzbuzz.fizzbuzz(args.n):
         print(item)
 
+
+def run_base(args: argparse.Namespace) -> None:
+    """Print a number in binary, octal and hexadecimal."""
+    print(bases.to_bases(args.number))
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -182,7 +188,7 @@ COMMAND_TABLE = {
     "coin": run_coin,
     "bmi": run_bmi,
     "fizzbuzz": run_fizzbuzz,
-
+    "base": run_base,
 
 }
 
@@ -282,6 +288,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     fb = sub.add_parser("fizzbuzz", help="print FizzBuzz sequence up to n")
     fb.add_argument("n", type=int, help="upper limit (must be at least 1)")
+
+    base = sub.add_parser(
+        "base", help="show a non-negative integer in binary, octal and hex"
+    )
+    base.add_argument("number", type=int, help="non-negative integer")
 
     return parser
 
