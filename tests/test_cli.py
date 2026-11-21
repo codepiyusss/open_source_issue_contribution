@@ -114,6 +114,27 @@ def test_roman_invalid_numeral(capsys):
     assert "not a valid Roman numeral" in capsys.readouterr().err
 
 
+def test_convert_rounds_to_two_decimals_by_default(capsys):
+    result = main(["convert", "100", "f2c"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "37.78"
+
+
+def test_convert_decimals_option(capsys):
+    result = main(["convert", "100", "f2c", "--decimals", "4"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "37.7778"
+
+
+def test_convert_whole_result_keeps_trailing_zero(capsys):
+    result = main(["convert", "100", "c2f"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "212.0"
+
+
 @pytest.mark.parametrize("value", ["nan", "inf"])
 def test_convert_rejects_non_finite_values(value):
     with pytest.raises(SystemExit):
