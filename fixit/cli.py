@@ -16,6 +16,7 @@ from fixit import (
     convert,
     health,
     fizzbuzz,
+    hashing,
     jsonfmt,
     lorem,
     password,
@@ -170,6 +171,11 @@ def run_base(args: argparse.Namespace) -> None:
     """Print a number in binary, octal and hexadecimal."""
     print(bases.to_bases(args.number))
 
+
+def run_hash(args: argparse.Namespace) -> None:
+    """Print the hex digest of the given text."""
+    print(hashing.hash_text(args.text, args.algo))
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -189,6 +195,7 @@ COMMAND_TABLE = {
     "bmi": run_bmi,
     "fizzbuzz": run_fizzbuzz,
     "base": run_base,
+    "hash": run_hash,
 
 }
 
@@ -293,6 +300,15 @@ def build_parser() -> argparse.ArgumentParser:
         "base", help="show a non-negative integer in binary, octal and hex"
     )
     base.add_argument("number", type=int, help="non-negative integer")
+
+    hs = sub.add_parser("hash", help="print the hash of a text")
+    hs.add_argument("text", help="text to hash")
+    hs.add_argument(
+        "--algo",
+        choices=hashing.SUPPORTED_ALGORITHMS,
+        default="sha256",
+        help="hash algorithm (default: sha256)",
+    )
 
     return parser
 
