@@ -11,6 +11,7 @@ from typing import Optional
 
 from fixit import (
     __version__,
+    bases,
     coin,
     convert,
     health,
@@ -60,7 +61,7 @@ def run_wc(args: argparse.Namespace) -> None:
 def run_convert(args: argparse.Namespace) -> None:
     try:
         result = CONVERSIONS[args.kind](args.value)
-        print(result)
+        print(round(result, args.decimals))
     except KeyError:
         raise ValueError(f"Error: unknown conversion '{args.kind}'")
 
@@ -229,6 +230,9 @@ def build_parser() -> argparse.ArgumentParser:
     cv = sub.add_parser("convert", help="convert units")
     cv.add_argument("value", type=finite_float)
     cv.add_argument("kind", choices=sorted(CONVERSIONS))
+    cv.add_argument(
+        "--decimals", type=int, default=2, help="digits after the decimal point (default: 2)"
+    )
 
     pw = sub.add_parser("password", help="generate a password")
     pw.add_argument("--length", type=int, default=12)
