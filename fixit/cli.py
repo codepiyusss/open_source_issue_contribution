@@ -26,6 +26,8 @@ from fixit import (
     wordcount,
 )
 
+from fixit.dates import days_until
+
 logger = logging.getLogger(__name__)
 CONVERSIONS = {
     "c2f": convert.celsius_to_fahrenheit,
@@ -176,6 +178,15 @@ def run_hash(args: argparse.Namespace) -> None:
     """Print the hex digest of the given text."""
     print(hashing.hash_text(args.text, args.algo))
 
+
+def run_days_until(args: argparse.Namespace) -> None:
+    """Print the number of days until the given date."""
+    days = days_until(args.date)
+    if days < 0:
+        print("This date has already passed.")
+    else:
+        print(days)
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -196,6 +207,7 @@ COMMAND_TABLE = {
     "fizzbuzz": run_fizzbuzz,
     "base": run_base,
     "hash": run_hash,
+    "days-until": run_days_until,
 
 }
 
@@ -309,6 +321,9 @@ def build_parser() -> argparse.ArgumentParser:
         default="sha256",
         help="hash algorithm (default: sha256)",
     )
+
+    du = sub.add_parser("days-until", help="count the days until a date")
+    du.add_argument("date", help="target date in YYYY-MM-DD format")
 
     return parser
 
