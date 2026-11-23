@@ -1,6 +1,6 @@
 """Small text helpers."""
-
-
+import re
+from hypothesis import given, strategies as st
 def is_palindrome(text: str) -> bool:
     """Check whether text reads the same forwards and backwards.
 
@@ -48,6 +48,9 @@ def convert_case(style: str, text: str) -> str:
 
     if style not in valid_styles:
         raise ValueError(f"Unsupported style: {style}")
+
+    text = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1 \2", text)
+    text = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", text)
 
     words = text.replace("-", " ").replace("_", " ").split()
     words = [word.lower() for word in words]
