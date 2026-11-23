@@ -20,7 +20,7 @@ Repository = "https://github.com/codepiyusss/open_source_issue_contribution"
 Issues = "https://github.com/codepiyusss/open_source_issue_contribution/issues"
 
 [project.optional-dependencies]
-dev = ["pytest", "ruff>=0.12.0", "mypy>=1.0,<2", "pytest-cov"]
+dev = ["pytest", "ruff>=0.12.0", "mypy>=1.0,<2", "pytest-cov", "hypothesis>=6.0"]
 
 [project.scripts]
 fixit = "fixit.cli:main"
