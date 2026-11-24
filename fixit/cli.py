@@ -14,6 +14,7 @@ from fixit import (
     bases,
     coin,
     convert,
+    dates,
     dice,
     health,
     fizzbuzz,
@@ -193,6 +194,11 @@ def run_days_until(args: argparse.Namespace) -> None:
     else:
         print(days)
 
+
+def run_age(args: argparse.Namespace) -> None:
+    """Print the age in completed years for a birth date."""
+    print(dates.age_in_years(args.birth))
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -215,6 +221,7 @@ COMMAND_TABLE = {
     "base": run_base,
     "hash": run_hash,
     "days-until": run_days_until,
+    "age": run_age,
 
 }
 
@@ -334,6 +341,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     du = sub.add_parser("days-until", help="count the days until a date")
     du.add_argument("date", help="target date in YYYY-MM-DD format")
+
+    age_parser = sub.add_parser("age", help="calculate age from a birth date")
+    age_parser.add_argument("birth", help="birth date in YYYY-MM-DD format")
 
     return parser
 
