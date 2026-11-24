@@ -14,6 +14,7 @@ from fixit import (
     bases,
     coin,
     convert,
+    dice,
     health,
     fizzbuzz,
     hashing,
@@ -149,6 +150,11 @@ def run_coin(args: argparse.Namespace) -> None:
         print(result)
 
 
+def run_dice(args: argparse.Namespace) -> None:
+    rolls, total = dice.roll_dice(args.notation)
+    print(f"rolls: {' '.join(map(str, rolls))}  total: {total}")
+
+
 def run_bmi(args: argparse.Namespace) -> None:
     bmi = health.calculate_bmi(args.kg, args.cm)
 
@@ -203,6 +209,7 @@ COMMAND_TABLE = {
     "prime": run_prime,
     "lorem": run_lorem,
     "coin": run_coin,
+    "dice": run_dice,
     "bmi": run_bmi,
     "fizzbuzz": run_fizzbuzz,
     "base": run_base,
@@ -300,6 +307,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     cn = sub.add_parser("coin", help="flip a coin")
     cn.add_argument("--count", type=int, default=1, help="number of flips (default: 1)")
+
+    dice_parser = sub.add_parser("dice", help="roll dice using NdM notation")
+    dice_parser.add_argument("notation", help="dice notation, such as 2d6")
 
     bmi = sub.add_parser("bmi", help="calculate Body Mass Index")
     bmi.add_argument("--kg", type=finite_float, required=True, help="weight in kilograms")
