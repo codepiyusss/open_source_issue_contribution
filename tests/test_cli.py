@@ -163,6 +163,16 @@ def test_without_verbose_does_not_log_debug(capsys):
     assert "DEBUG" not in captured.err
 
 
+def test_no_command_shows_error(capsys):
+    with pytest.raises(SystemExit) as exc_info:
+        main([])
+
+    assert exc_info.value.code == 2
+
+    captured = capsys.readouterr()
+    assert "usage" in captured.err.lower()
+
+
 def test_help_shows_examples(capsys):
     parser = build_parser()
 
