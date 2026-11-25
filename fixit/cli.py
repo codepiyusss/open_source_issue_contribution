@@ -14,6 +14,8 @@ from fixit import (
     bases,
     coin,
     convert,
+    dates,
+    dice,
     health,
     fizzbuzz,
     hashing,
@@ -25,6 +27,8 @@ from fixit import (
     textutils,
     wordcount,
 )
+
+from fixit.dates import days_until
 
 logger = logging.getLogger(__name__)
 CONVERSIONS = {
@@ -147,6 +151,11 @@ def run_coin(args: argparse.Namespace) -> None:
         print(result)
 
 
+def run_dice(args: argparse.Namespace) -> None:
+    rolls, total = dice.roll_dice(args.notation)
+    print(f"rolls: {' '.join(map(str, rolls))}  total: {total}")
+
+
 def run_bmi(args: argparse.Namespace) -> None:
     bmi = health.calculate_bmi(args.kg, args.cm)
 
@@ -176,6 +185,20 @@ def run_hash(args: argparse.Namespace) -> None:
     """Print the hex digest of the given text."""
     print(hashing.hash_text(args.text, args.algo))
 
+
+def run_days_until(args: argparse.Namespace) -> None:
+    """Print the number of days until the given date."""
+    days = days_until(args.date)
+    if days < 0:
+        print("This date has already passed.")
+    else:
+        print(days)
+
+
+def run_age(args: argparse.Namespace) -> None:
+    """Print the age in completed years for a birth date."""
+    print(dates.age_in_years(args.birth))
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -192,10 +215,13 @@ COMMAND_TABLE = {
     "prime": run_prime,
     "lorem": run_lorem,
     "coin": run_coin,
+    "dice": run_dice,
     "bmi": run_bmi,
     "fizzbuzz": run_fizzbuzz,
     "base": run_base,
     "hash": run_hash,
+    "days-until": run_days_until,
+    "age": run_age,
 
 }
 
@@ -216,7 +242,16 @@ def build_parser() -> argparse.ArgumentParser:
         assert args.command == "wc"
     """
     parser = argparse.ArgumentParser(
-        prog="fixit", description="A tiny toolbox to practice open source."
+        prog="fixit",
+        description="A tiny toolbox to practice open source.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""Examples:
+    fixit wc "hello world"
+    fixit convert 100 c2f
+    fixit password --length 16 --symbols
+    fixit roman 42
+    fixit prime 17
+    """,
     )
     parser.add_argument("--version", action="version", version=f"fixit {__version__}")
     parser.add_argument(
@@ -289,6 +324,9 @@ def build_parser() -> argparse.ArgumentParser:
     cn = sub.add_parser("coin", help="flip a coin")
     cn.add_argument("--count", type=int, default=1, help="number of flips (default: 1)")
 
+    dice_parser = sub.add_parser("dice", help="roll dice using NdM notation")
+    dice_parser.add_argument("notation", help="dice notation, such as 2d6")
+
     bmi = sub.add_parser("bmi", help="calculate Body Mass Index")
     bmi.add_argument("--kg", type=finite_float, required=True, help="weight in kilograms")
     bmi.add_argument("--cm", type=finite_float, required=True, help="height in centimeters")
@@ -309,6 +347,12 @@ def build_parser() -> argparse.ArgumentParser:
         default="sha256",
         help="hash algorithm (default: sha256)",
     )
+
+    du = sub.add_parser("days-until", help="count the days until a date")
+    du.add_argument("date", help="target date in YYYY-MM-DD format")
+
+    age_parser = sub.add_parser("age", help="calculate age from a birth date")
+    age_parser.add_argument("birth", help="birth date in YYYY-MM-DD format")
 
     return parser
 
