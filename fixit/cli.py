@@ -242,7 +242,16 @@ def build_parser() -> argparse.ArgumentParser:
         assert args.command == "wc"
     """
     parser = argparse.ArgumentParser(
-        prog="fixit", description="A tiny toolbox to practice open source."
+        prog="fixit",
+        description="A tiny toolbox to practice open source.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""Examples:
+    fixit wc "hello world"
+    fixit convert 100 c2f
+    fixit password --length 16 --symbols
+    fixit roman 42
+    fixit prime 17
+    """,
     )
     parser.add_argument("--version", action="version", version=f"fixit {__version__}")
     parser.add_argument(

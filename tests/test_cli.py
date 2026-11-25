@@ -3,6 +3,7 @@ import json
 import pytest
 
 from fixit.cli import main
+from fixit.cli import build_parser
 
 
 def test_version(capsys):
@@ -160,3 +161,16 @@ def test_without_verbose_does_not_log_debug(capsys):
     assert result == 0
     assert captured.out.strip() == "words=2 lines=1 chars=11"
     assert "DEBUG" not in captured.err
+
+
+def test_help_shows_examples(capsys):
+    parser = build_parser()
+
+    with pytest.raises(SystemExit) as exc_info:
+        parser.parse_args(["--help"])
+
+    assert exc_info.value.code == 0
+
+    captured = capsys.readouterr()
+    assert "Examples" in captured.out
+    assert "fixit wc" in captured.out
