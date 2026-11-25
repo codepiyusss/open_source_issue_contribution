@@ -325,8 +325,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         argv = sys.argv[1:]
 
     if not argv:
-        parser.print_help()
-        return 0
+        parser.print_usage(sys.stderr)
+        parser.exit(2)
 
     try:
         args = parser.parse_args(argv)

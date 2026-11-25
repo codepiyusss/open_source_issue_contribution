@@ -160,3 +160,12 @@ def test_without_verbose_does_not_log_debug(capsys):
     assert result == 0
     assert captured.out.strip() == "words=2 lines=1 chars=11"
     assert "DEBUG" not in captured.err
+
+def test_no_command_shows_error(capsys):
+    with pytest.raises(SystemExit) as exc_info:
+        main([])
+
+    assert exc_info.value.code == 2
+
+    captured = capsys.readouterr()
+    assert "usage" in captured.err.lower()
