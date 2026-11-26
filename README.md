@@ -7,7 +7,6 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)
 ![good first issues](https://img.shields.io/badge/good%20first%20issues-30%2B-orange)
-[![Ruff](https://github.com/codepiyusss/open_source_issue_contribution/actions/workflows/ruff.yml/badge.svg)](https://github.com/codepiyusss/open_source_issue_contribution/actions/workflows/ruff.yml)
 ![CI](https://github.com/codepiyusss/open_source_issue_contribution/actions/workflows/ci.yml/badge.svg)
 ## 🎯 What is this?
 
