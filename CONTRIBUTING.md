@@ -18,6 +18,8 @@ pytest
 ```
 All tests should pass (known bugs show as `xfail`).
 
+New to Git? Check out the [Git Cheat Sheet](docs/GIT_CHEATSHEET.md) for a quick command reference.
+
 ## Pre-commit hooks
 
 Install pre-commit:
