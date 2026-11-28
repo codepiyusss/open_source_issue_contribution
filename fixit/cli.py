@@ -21,6 +21,7 @@ from fixit import (
     hashing,
     jsonfmt,
     lorem,
+    morse,
     password,
     primes,
     roman,
@@ -199,6 +200,15 @@ def run_age(args: argparse.Namespace) -> None:
     """Print the age in completed years for a birth date."""
     print(dates.age_in_years(args.birth))
 
+def run_morse(args: argparse.Namespace) -> None:
+    try:
+        if args.decode:
+            print(morse.decode(args.text))
+        else:
+            print(morse.encode(args.text))
+    except ValueError as exc:
+        raise ValueError(str(exc)) from exc
+
 COMMAND_TABLE = {
     "wc": run_wc,
     "convert": run_convert,
@@ -222,6 +232,7 @@ COMMAND_TABLE = {
     "hash": run_hash,
     "days-until": run_days_until,
     "age": run_age,
+    "morse": run_morse,
 
 }
 
@@ -353,6 +364,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     age_parser = sub.add_parser("age", help="calculate age from a birth date")
     age_parser.add_argument("birth", help="birth date in YYYY-MM-DD format")
+
+    morse_parser = sub.add_parser("morse", help="Encode or decode Morse code")
+    morse_parser.add_argument("text", help="text or Morse code to process")
+    morse_parser.add_argument("--decode", action="store_true", help="decode Morse code to text")
 
     return parser
 
