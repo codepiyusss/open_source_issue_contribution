@@ -59,6 +59,41 @@ def test_wc_file_not_found(capsys):
     assert result == 1
     assert "missing_file.txt" in capsys.readouterr().err
 
+def test_wc_words_flag(capsys):
+    result = main(["wc", "hello world", "--words"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "words=2"
+
+
+def test_wc_lines_flag(capsys):
+    result = main(["wc", "one\ntwo\nthree", "--lines"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "lines=3"
+
+
+def test_wc_chars_flag(capsys):
+    result = main(["wc", "hello world", "--chars"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "chars=11"
+
+
+def test_wc_multiple_flags_keep_fixed_order(capsys):
+    result = main(["wc", "hello world", "--chars", "--words"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "words=2 chars=11"
+
+
+def test_wc_default_prints_all_counts(capsys):
+    result = main(["wc", "hello world"])
+
+    assert result == 0
+    assert capsys.readouterr().out.strip() == "words=2 lines=1 chars=11"
+
+
 def test_wc_json_output(capsys):
     result = main(["wc", "a b", "--json"])
 

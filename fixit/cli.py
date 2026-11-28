@@ -53,11 +53,15 @@ def run_wc(args: argparse.Namespace) -> None:
         raise ValueError("Error: provide text or use --file")
 
     if not args.json:
-        print(
-            f"words={wordcount.count_words(text)} "
-            f"lines={wordcount.count_lines(text)} "
-            f"chars={wordcount.count_chars(text)}"
-        )
+        show_all = not (args.words or args.lines or args.chars)
+        parts = []
+        if show_all or args.words:
+            parts.append(f"words={wordcount.count_words(text)}")
+        if show_all or args.lines:
+            parts.append(f"lines={wordcount.count_lines(text)}")
+        if show_all or args.chars:
+            parts.append(f"chars={wordcount.count_chars(text)}")
+        print(" ".join(parts))
     else:
         print(wordcount.prepare_json(text))
 
@@ -266,6 +270,9 @@ def build_parser() -> argparse.ArgumentParser:
     wc.add_argument("text", nargs="?")
     wc.add_argument("--file", type=Path, help="read text from a file")
     wc.add_argument("--json", action="store_true", help="output counts as JSON")
+    wc.add_argument("--words", action="store_true", help="show only the word count")
+    wc.add_argument("--lines", action="store_true", help="show only the line count")
+    wc.add_argument("--chars", action="store_true", help="show only the character count")
 
     cv = sub.add_parser("convert", help="convert units")
     cv.add_argument("value", type=finite_float)
